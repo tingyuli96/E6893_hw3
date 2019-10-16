@@ -8,11 +8,15 @@ This module is the spark streaming analysis process.
 Usage:
     If used with dataproc:
         gcloud dataproc jobs submit pyspark --cluster <Cluster Name> twitterHTTPClient.py
+    
+    Create a dataset in BigQurey first using
+        bq mk bigdata_sparkStreaming
 
 
 Todo:
     1. hashtagCount: calculate accumulated hashtags count
     2. wordCount: calculate word count every 10 seconds
+        the word you should track is listed below. 
     3. save the result to google BigQuery
 
 """
@@ -33,12 +37,13 @@ output_directory_hashtags = 'gs://{}/hadoop/tmp/bigquery/pyspark_output/hashtags
 output_directory_wordcount = 'gs://{}/hadoop/tmp/bigquery/pyspark_output/wordcount'.format(bucket)
 
 # output table and columns name 
-output_dataset = 'bigdata_sparkStreaming'
+output_dataset = 'bigdata_sparkStreaming'   #the name of dataset in BigQuery
 output_table_hashtags = 'hashtags'
 columns_name_hashtags = ['hashtags', 'count']
 output_table_wordcount = 'wordcount'
 columns_name_wordcount = ['word', 'count', 'timestamp']
 
+WORD = ['data', 'spark', 'ai', 'movie', 'good']     #the words you should filter and do word count
 
 # Helper functions
 def saveToStorage(rdd, output_directory, columns_name, mode):
@@ -71,7 +76,7 @@ def saveToBigQuery(sc, output_dataset, output_table, directory):
 
 def hashtagCount(words):
     """
-    Calculte the accumulated hashtags count sum from the beginning of the stream
+    Calculate the accumulated hashtags count sum from the beginning of the stream
     and sort it by descending order of the count. 
     Ignore case sensitivity when counting the hashtags:
         "#Ab" and "#ab" is considered to be a same hashtag

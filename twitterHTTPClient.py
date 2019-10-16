@@ -3,17 +3,18 @@
 # Columbia EECS E6893 Big Data Analytics
 """
 This module is used to pull data from twitter API and send data to
-Spark Streaming process using socket. It acts like a client of 
-twitter API and a server of spark streaming. It open a listening TCP 
-server socket, and listen to any connection from TCP client. After 
+Spark Streaming process using socket. It acts like a client of
+twitter API and a server of spark streaming. It open a listening TCP
+server socket, and listen to any connection from TCP client. After
 a connection established, it send streaming data to it.
 
 
-Usage: 
+Usage:
   If used with dataproc:
     gcloud dataproc jobs submit pyspark --cluster <Cluster Name> twitterHTTPClient.py
 
-  Be sure that you run this module before you run spark streaming process.
+  Make sure that you run this module before you run spark streaming process.
+  Please remember stop the job on dataproc if you no longer want to stream data.
 
 Todo:
   1. change the credentials to your own
@@ -35,8 +36,8 @@ ACCESS_SECRET = ''    # your access token secret
 CONSUMER_KEY = ''     # your API key
 CONSUMER_SECRET = ''  # your API secret key
 
-# the tags you want to track
-tags = ['#', 'bigdata']
+# the tags to track
+tags = ['#', 'bigdata', 'spark', 'ai', 'movie']
 
 class TweetsListener(StreamListener):
     """
@@ -74,7 +75,7 @@ class twitter_client:
       self.s.bind((TCP_IP, TCP_PORT))
 
     def run_client(self, tags):
-      try: 
+      try:
         self.s.listen(1)
         while True:
           print("Waiting for TCP connection...")
@@ -83,7 +84,7 @@ class twitter_client:
           sendData(conn,tags)
           conn.close()
       except KeyboardInterrupt:
-        exit 
+        exit
 
 
 if __name__ == '__main__':
