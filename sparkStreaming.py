@@ -37,7 +37,7 @@ output_directory_hashtags = 'gs://{}/hadoop/tmp/bigquery/pyspark_output/hashtags
 output_directory_wordcount = 'gs://{}/hadoop/tmp/bigquery/pyspark_output/wordcount'.format(bucket)
 
 # output table and columns name 
-output_dataset = 'bigdata_sparkStreaming'   #the name of dataset in BigQuery
+output_dataset = ''                     #the name of your dataset in BigQuery
 output_table_hashtags = 'hashtags'
 columns_name_hashtags = ['hashtags', 'count']
 output_table_wordcount = 'wordcount'
