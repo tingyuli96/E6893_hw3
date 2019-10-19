@@ -17,7 +17,7 @@ Usage:
 
 Todo:
     1. hashtagCount: calculate accumulated hashtags count
-    2. wordCount: calculate word count every 10 seconds
+    2. wordCount: calculate word count every 60 seconds
         the word you should track is listed below.
     3. save the result to google BigQuery
 
@@ -57,6 +57,12 @@ WORD = ['data', 'spark', 'ai', 'movie', 'good']     #the words you should filter
 def saveToStorage(rdd, output_directory, columns_name, mode):
     """
     Save each RDD in this DStream to google storage
+    Args:
+        rdd: input rdd
+        output_directory: output directory in google storage
+        columns_name: columns name of dataframe
+        mode: mode = "overwirte", overwirte the file
+              mode = "append", append data to the end of file
     """
     if not rdd.isEmpty():
         (rdd.toDF( columns_name ) \
@@ -162,11 +168,13 @@ if __name__ == '__main__':
     # save hashtags count and word count to google storage
     # used to save to google BigQuery
     # You should:
-    #   1. topTags: only save the last DStream
-    #   2. wordCount: save each DStream
+    #   1. topTags: only save the lastest rdd in DStream
+    #   2. wordCount: save each rdd in DStream
     # Hints:
     #   1. You can take a look at foreachRDD transformation
     #   2. You may want to use helper function saveToStorage
+    #   3. You should use save output to output_directory_hashtags, output_directory_wordcount,
+    #       and have output columns name columns_name_hashtags and columns_name_wordcount.
     # TODO: insert your code here
 
     # start streaming process, wait for 600s and then stop.
